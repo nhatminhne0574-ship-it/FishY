@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=FishY
+GenericName=Website Cloner
+Comment=Clone any website with pixel-perfect precision — HTML, CSS, JS, images & everything
+Exec=__INSTALL_DIR__/fishy
+Icon=__INSTALL_DIR__/icon.svg
+Terminal=false
+Type=Application
+Categories=Utility;Development;WebDevelopment;
+StartupNotify=true
+StartupWMClass=FishY
